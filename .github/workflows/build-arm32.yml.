@@ -1,0 +1,39 @@
+
+name: Build GANG HANGOUT ARM32
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Install NDK
+        run: sdkmanager "ndk;27.2.12479018"
+
+      - name: Clone AML PSDK
+        run: |
+          git clone https://github.com/AndroidModLoader/aml-psdk.git psdk
+          cp src/main.cpp psdk/main.cpp
+          sed -i 's/AML_PSDK_Template/GANGHANGOUT/g' psdk/Android.mk
+
+      - name: Build ARM32
+        run: |
+          export ANDROID_NDK_HOME="$ANDROID_SDK_ROOT/ndk/27.2.12479018"
+          "$ANDROID_NDK_HOME/ndk-build" \
+            NDK_PROJECT_PATH="$GITHUB_WORKSPACE/psdk" \
+            APP_BUILD_SCRIPT="$GITHUB_WORKSPACE/psdk/Android.mk" \
+            APP_ABI=armeabi-v7a \
+            NDK_LIBS_OUT="$GITHUB_WORKSPACE/output"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: GANGHANGOUT-ARM32
+          path: output/armeabi-v7a/*.so
