@@ -1,0 +1,6 @@
+GANG HANGOUT / AML 2.00 ARM32
+STATUS: SOURCE SCAFFOLD ONLY
+
+This project is not a finished gameplay mod.
+No gang turf logic, NPC spawning, vehicle lean pose, or conversation animation is implemented.
+Do not describe the output .so as the final GANG HANGOUT plugin.
